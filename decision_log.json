@@ -1,0 +1,44 @@
+[
+  {
+    "step": 1,
+    "name": "Capability discovery",
+    "decision": "OnePlus 15 \u2014 Qualcomm Snapdragon 8 Elite (HTP v81 + Adreno 830) (soc)",
+    "justification": "RAM=16.0GB VRAM=0.0GB bw=85.0GB/s"
+  },
+  {
+    "step": 2,
+    "name": "Cost model",
+    "decision": "RAM + IO + compute + dequant",
+    "justification": "storage BW 4000.0MB/s; compute 40.0 TFLOPS"
+  },
+  {
+    "step": 3,
+    "name": "Candidate generation",
+    "decision": "23463 tensors \u00d7 \u22649 formats",
+    "justification": "Pareto-filtered non-dominated candidates"
+  },
+  {
+    "step": 4,
+    "name": "Static Oracle",
+    "decision": "pin norms=FP32; boost embed/lm_head/gate importance",
+    "justification": "known sensitivity hierarchy from earlier validations"
+  },
+  {
+    "step": 5,
+    "name": "Prediction",
+    "decision": "Q4_0:77.7GB,4.50bpw; Q8_0:146.8GB,8.50bpw; Q2_K:44.3GB,2.56bpw",
+    "justification": "uniform baselines for later mixed vs uniform comparison"
+  },
+  {
+    "step": 6,
+    "name": "Allocation",
+    "decision": "mixed_greedy: 1.13 avg bpw",
+    "justification": "19.43 GB of 16.0 GB memory reserved 2.93 GB"
+  },
+  {
+    "step": 7,
+    "name": "Execution planning",
+    "decision": "423 resident / 23040 streamed tensors",
+    "justification": "KV=fp16, expert cache cap=32, placements={'norm': 'cpu', 'embed': 'htp', 'attn_qkv': 'cpu'}"
+  }
+]

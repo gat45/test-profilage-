@@ -1,0 +1,57 @@
+{
+  "name": "Kimi-K3",
+  "total_params": 148342542336,
+  "total_params_B": 148.34,
+  "layers": 60,
+  "hidden_size": 4096,
+  "is_moe": true,
+  "num_experts": 128,
+  "top_k": 16,
+  "active_params_per_token_B": 21.51,
+  "raw_size_gb_bf16": 276.31,
+  "n_tensors": 23463,
+  "family_breakdown": {
+    "embed": {
+      "count": 1,
+      "params": 419430400,
+      "bytes": 838860800,
+      "share_pct": 0.3
+    },
+    "attn_qkv": {
+      "count": 180,
+      "params": 1509949440,
+      "bytes": 3019898880,
+      "share_pct": 1.0
+    },
+    "attn_out": {
+      "count": 60,
+      "params": 1006632960,
+      "bytes": 2013265920,
+      "share_pct": 0.7
+    },
+    "norm": {
+      "count": 121,
+      "params": 495616,
+      "bytes": 1982464,
+      "share_pct": 0.0
+    },
+    "moe_gate": {
+      "count": 60,
+      "params": 31457280,
+      "bytes": 62914560,
+      "share_pct": 0.0
+    },
+    "moe_expert": {
+      "count": 23040,
+      "params": 144955146240,
+      "bytes": 72477573120,
+      "share_pct": 97.7
+    },
+    "lm_head": {
+      "count": 1,
+      "params": 419430400,
+      "bytes": 838860800,
+      "share_pct": 0.3
+    }
+  }
+}

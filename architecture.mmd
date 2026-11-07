@@ -1,0 +1,48 @@
+flowchart TB
+    subgraph INPUT["Entrées du système"]
+        M1["Modèle source<br/>(GGUF, Safetensors, HF)"]
+        H1["Profil matériel cible<br/>(CPU, GPU, NPU HTP, RAM, VRAM, I/O)"]
+        C1["Contraintes<br/>(budget mémoire, latence cible)"]
+    end
+
+    subgraph PROFILER["PROFILER V3/V5 — 12 Axes"]
+        P1["Cartographie structurelle"]
+        P2["Analyse des formats"]
+        P3["Sensibilité & Allocation adaptative"]
+        P4["Profilage mémoire & I/O"]
+        P5["CPU / GPU / NPU HTP"]
+        P6["Profilage MoE & KV Cache"]
+        P7["Performance, Qualité L1-L3"]
+        P8["Modèle prédictif matériel"]
+    end
+
+    subgraph QUANT["QUANTIFICATION ALGO — 10 Algorithmes"]
+        Q1["Précision mixte par tenseur"]
+        Q2["Quantification activations (AWQ/GPTQ)"]
+        Q3["Optimisation échelles & groupes"]
+        Q4["Quantification hiérarchique"]
+        Q5["Quantification MoE par expert"]
+        Q6["Compression sans perte (MXFP4)"]
+        Q7["Cache MoE adaptatif"]
+        Q8["Recherche multiobjectif Pareto"]
+    end
+
+    subgraph PLANNER["Z2/D2 PLANNER — Décision & Stratégie"]
+        PL1["Capability Discovery"]
+        PL2["Cost Model (IO + compute + dequant)"]
+        PL3["Static Oracle & Prédiction"]
+        PL4["Allocation & Plan d'exécution"]
+    end
+
+    subgraph RUNTIME["RUNTIME & VALIDATION"]
+        R1["Exécution avec working-set limité"]
+        R2["Streaming de poids & cache experts"]
+        R3["Validation L1-L3 (structure, activations, perplexité)"]
+    end
+
+    INPUT --> PROFILER
+    PROFILER -->|"model_map, sensibilité,<br/>coûts I/O, prédictions"| PLANNER
+    QUANT -->|"formats candidats,<br/>compromis Pareto"| PLANNER
+    PROFILER <-->|"itérations de calibrage"| QUANT
+    PLANNER -->|"quantization_plan.json<br/>execution_strategy"| RUNTIME
+    RUNTIME -.->|"feedback & adaptation<br/>(mesures réelles)"| PLANNER

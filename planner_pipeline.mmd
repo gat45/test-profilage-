@@ -1,0 +1,23 @@
+flowchart TB
+    subgraph P1["PHASE 1 — DÉCOUVERTE"]
+        direction LR
+        S1["1. Capability discovery<br/>(CPU/GPU/NPU, RAM, I/O)"] --> S2["2. Cost model<br/>(RAM, I/O, compute)"] --> S3["3. Candidate generation<br/>(plans alternatifs)"]
+    end
+    subgraph P2["PHASE 2 — DÉCISION"]
+        direction LR
+        S4["4. Static Oracle<br/>(filtrage a priori)"] --> S5["5. Performance prediction<br/>(tok/s, latence, PPL)"] --> S6["6. Resource allocation<br/>(poids, caches, kernels)"]
+    end
+    subgraph P3["PHASE 3 — EXÉCUTION & BOUCLE"]
+        direction LR
+        S7["7. Execution planning<br/>(ordonnancement)"] --> S8["8. Runtime feedback<br/>(mesures réelles)"] --> S9["9. Adaptive revision<br/>(mise à jour continue)"]
+    end
+    S3 --> S4
+    S6 --> S7
+    S9 -.->|"boucle d'adaptation (mesures vs prédictions)"| S4
+
+    classDef p1 fill:#e8f1fa,stroke:#1d4e89,stroke-width:1.5px;
+    classDef p2 fill:#fdf8ee,stroke:#b57c1e,stroke-width:1.5px;
+    classDef p3 fill:#f5f3fa,stroke:#6f42c1,stroke-width:1.5px;
+    class S1,S2,S3 p1;
+    class S4,S5,S6 p2;
+    class S7,S8,S9 p3;

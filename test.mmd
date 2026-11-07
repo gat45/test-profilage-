@@ -1,0 +1,6 @@
+graph TD
+    A[Profiler V3/V5] -->|Profils et prédictions| C[Z2/D2 Planner]
+    B[Quantification Algo] -->|Formats et candidats| C
+    C -->|Plan d'exécution| D[Runtime / Matériel]
+    D -->|Métriques réelles| E[Validation L1-L3]
+    E -->|Feedback| C

@@ -1,0 +1,74 @@
+direction: right
+
+inputs: ENTRÉES {
+  style.fill: "#f1f5f9"
+  style.stroke: "#94a3b8"
+  m: Modèle source\n(GGUF, Safetensors, HF)
+  h: Profil matériel cible\n(CPU, GPU, NPU, RAM, I/O)
+  c: Budgets mémoire & latence
+}
+
+profiler: PROFILER V3/V5\n12 axes de mesure {
+  style.fill: "#e8f1fa"
+  style.stroke: "#1d4e89"
+  f1: Cartographie structurelle & formats
+  f2: Sensibilité & allocation de précision
+  f3: Profils mémoire (3 budgets), I/O & transferts
+  f4: Profilage MoE, KV cache, perf, qualité L1–L3
+  f5: Modèle prédictif matériel
+}
+
+algo: QUANTIFICATION ALGO\n10 axes d'optimisation {
+  style.fill: "#eef8f6"
+  style.stroke: "#007f8c"
+  f1: Précision mixte par tenseur (knapsack / Pareto)
+  f2: Calibration sur activations (AWQ / GPTQ)
+  f3: Optimisation échelles, groupes & clipping
+  f4: Quantification MoE par expert
+  f5: Compression physique sans perte & cache expert
+}
+
+planner: Z2/D2 PLANNER\nPipeline de décision {
+  style.fill: "#fdf8ee"
+  style.stroke: "#b57c1e"
+  f1: 1. Discovery → 2. Cost model → 3. Candidats
+  f2: 4. Static Oracle → 5. Prédiction
+  f3: 6. Allocation → 7. Plan d'exécution
+  f4: 8. Feedback → 9. Adaptation
+  f5: quantization_plan.json
+}
+
+runtime: RUNTIME & VALIDATION\nExécution contrôlée {
+  style.fill: "#f5f3fa"
+  style.stroke: "#6f42c1"
+  f1: Exécution working-set ≤ limite mémoire
+  f2: Streaming des poids & cache d'experts
+  f3: Validation 3 niveaux : L1 → L2 → L3
+  f4: Télémesures réelles (tok/s, octets/token)
+}
+
+inputs.m -> profiler: "analyse\nstructurelle"
+inputs.h -> profiler: "capacités\nmatérielles"
+inputs.c -> planner: "contraintes\nbudgétaires"
+
+profiler -> planner: "model_map, sensibilité,\ncoûts mesurés,\nprédictions" {
+  style.stroke: "#1d4e89"
+}
+
+profiler <-> algo: "calibration &\nitérations" {
+  style.stroke: "#007f8c"
+  style.stroke-dash: 3
+}
+
+algo -> planner: "formats candidats,\nplans Pareto" {
+  style.stroke: "#007f8c"
+}
+
+planner -> runtime: "quantization_plan.json,\nstratégie de streaming,\nplacement des kernels" {
+  style.stroke: "#b57c1e"
+}
+
+runtime -> planner: "feedback télémétrie\n& adaptation" {
+  style.stroke: "#6f42c1"
+  style.stroke-dash: 4
+}

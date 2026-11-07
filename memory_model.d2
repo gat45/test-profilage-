@@ -1,0 +1,50 @@
+direction: right
+
+subgraph storage: A. STORAGE BUDGET\n(taille sur stockage SSD/NVMe) {
+  style.fill: "#f8fafc"
+  style.stroke: "#64748b"
+  mod: Modèle quantifié complet\n(ex. Kimi K3 ~150–300 Go)
+  idx: Index & métadonnées\n(tensor_map, offsets, échelles)
+}
+
+subgraph move: B. MOVEMENT BUDGET\n(transferts par token généré) {
+  style.fill: "#fff7ed"
+  style.stroke: "#ea580c"
+  read: Lectures sélectives\n(HTTP Range / DMA / PCIe)
+  stream: Streaming d'experts\n(Top-16 activés par token)
+  met: "Métrique centrale :\nIO_token = octets lus / tokens"
+}
+
+subgraph mem: C. MEMORY BUDGET\n(working-set ≤ limite, ex. 8 GiB) {
+  style.fill: "#eef8f6"
+  style.stroke: "#007f8c"
+  res: Poids résidents prioritaires\n(embeddings, LM head, MLP critiques)
+  kv: KV Cache (longueur × INT4/8)\nMLA / récurrent
+  act: Activations temporaires
+  cache: Cache d'experts MoE\n(LRU / LFU / adaptatif)
+}
+
+subgraph comp: ACCÉLÉRATEURS {
+  style.fill: "#e8f1fa"
+  style.stroke: "#1d4e89"
+  cpu: CPU — SIMD, AVX2, NEON,\ndéquantification
+  gpu: GPU — GEMM, CUDA, OpenCL
+  htp: Qualcomm HTP v81 — VTCM,\nQAIRT, RPC
+}
+
+storage -> move: "lecture à la demande &\npréchargement" {
+  style.stroke: "#ea580c"
+}
+
+move -> mem: "streaming des poids &\ndes experts activés" {
+  style.stroke: "#007f8c"
+}
+
+mem -> comp: "placement adaptatif\nT_total = T_load + T_transfer +\nT_dequant + T_compute + T_sync" {
+  style.stroke: "#1d4e89"
+}
+
+comp -> mem: "fallbacks détectés\n& télémétrie" {
+  style.stroke: "#64748b"
+  style.stroke-dash: 4
+}

@@ -1,0 +1,10 @@
+{
+  "entry": "main.typ",
+  "metadata": {
+    "author": "Équipe Projet",
+    "subtitle": "Documentation technique de référence — Profiler V3/V5, Quantification Algo, Z2/D2 Planner",
+    "title": "Architecture complète du projet de quantification adaptative et de profilage matériel"
+  },
+  "mode": "report",
+  "theme": "report-theme.typ"
+}

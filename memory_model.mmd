@@ -1,0 +1,35 @@
+flowchart TB
+    subgraph ST["A. STORAGE BUDGET — Stockage SSD / NVMe"]
+        S1["Modèle quantifié complet (ex. Kimi K3 ~150–300 Go)<br/>+ index des tenseurs (tensor_map)"]
+    end
+
+    subgraph MV["B. MOVEMENT BUDGET — Transferts par token"]
+        M1["Lectures à la demande (HTTP Range / DMA) & streaming d'experts Top-16<br/><b>Métrique :</b> IO_token = octets lus / tokens générés (froid vs chaud)"]
+    end
+
+    subgraph RM["C. MEMORY BUDGET — Working-set ≤ limite (ex. 8 GiB)"]
+        W1["Poids résidents prioritaires<br/>(embeddings, LM head, MLP critiques)"]
+        W2["KV Cache (longueur contexte × format INT4/8)<br/>attention MLA / récurrente"]
+        W3["Activations temporaires<br/>(crêtes mémoire)"]
+        W4["Cache d'experts MoE<br/>(LRU, LFU, adaptatif)"]
+    end
+
+    subgraph CP["ACCÉLÉRATEURS — Exécution des opérations"]
+        C1["CPU : SIMD / déquantification"]
+        C2["GPU : GEMM / CUDA / OpenCL"]
+        C3["Qualcomm HTP v81 : VTCM / QAIRT"]
+    end
+
+    ST -->|"lecture & préchargement"| MV
+    MV -->|"streaming des tenseurs"| RM
+    RM -->|"placement adaptatif des kernels"| CP
+    CP -.->|"télémétrie : fallbacks, occupation, latences"| RM
+
+    classDef stor fill:#f8fafc,stroke:#64748b,stroke-width:1.5px;
+    classDef move fill:#fff7ed,stroke:#ea580c,stroke-width:1.5px;
+    classDef memo fill:#eef8f6,stroke:#007f8c,stroke-width:1.5px;
+    classDef comp fill:#e8f1fa,stroke:#1d4e89,stroke-width:1.5px;
+    class ST,S1 stor;
+    class MV,M1 move;
+    class RM,W1,W2,W3,W4 memo;
+    class CP,C1,C2,C3 comp;
